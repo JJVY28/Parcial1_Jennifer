@@ -1,0 +1,74 @@
+/* 🔵 Estilos generales */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    background-color: #f4f4f4;
+}
+
+/* 🟡 Encabezado */
+header {
+    background-color: #333;
+    color: white;
+    padding: 20px;
+}
+
+/* 🟢 Contenedor principal */
+.contenedor {
+    display: grid;
+    gap: 20px;
+    padding: 20px;
+}
+
+/* 🔴 Estilos de las cajas */
+.caja {
+    background-color: #ff6f61;
+    color: white;
+    padding: 30px;
+    font-size: 20px;
+    font-weight: bold;
+    border-radius: 10px;
+    text-transform: uppercase;
+}
+
+/* 🟣 Footer */
+footer {
+    background-color: #333;
+    color: white;
+    padding: 10px;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}
+
+/* 📱 Para pantallas pequeñas (menos de 600px) */
+@media (max-width: 600px) {
+    .contenedor {
+        grid-template-columns: 1fr;
+    }
+    .caja {
+        background-color: lightblue;
+    }
+}
+
+/* 📲 Para tablets (601px a 1024px) */
+@media (min-width: 601px) and (max-width: 1024px) {
+    .contenedor {
+        grid-template-columns: 1fr 1fr;
+    }
+    .caja {
+        background-color: lightgreen;
+    }
+}
+
+/* 🖥️ Para pantallas grandes (más de 1025px) */
+@media (min-width: 1025px) {
+    .contenedor {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    .caja {
+        background-color: lightcoral;
+    }
+}
+
