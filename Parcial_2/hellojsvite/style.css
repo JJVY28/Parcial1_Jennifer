@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 body {
     font-family: Arial, sans-serif;
     background-color: rosybrown;
@@ -58,3 +59,65 @@ button:hover {
     font-size: 1.2rem;
     color: #333;
 }
+=======
+body {
+    font-family: Arial, sans-serif;
+    background-color: rosybrown;
+    text-align: center;
+    padding: 20px;
+}
+
+header {
+    background-color: rgb(163, 99, 110);
+    color: palegoldenrod;
+    padding: 20px;
+    margin-bottom: 30px;
+}
+
+h1 {
+    font-size: 2.5rem;
+}
+
+section {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+}
+
+.producto {
+    background-color: plum;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 200px;
+}
+
+.producto img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+button {
+    background-color:pink;
+    color: brown;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+button:hover {
+    background-color: black;
+}
+
+#detalles {
+    margin-top: 30px;
+    font-weight: bold;
+    font-size: 1.2rem;
+    color: #333;
+}
+>>>>>>> 1afc18651f61050375c8a9760d30660654935017
