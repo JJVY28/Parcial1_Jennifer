@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id = "contenedor">
+        <p>Esto es un párrafo</p> 
+        Esto es un texto
+    </div>
+    <script>
+        window.onload = function()
+        {
+            let elemento = document.getElementById('contenedor');
+            console.long("children");
+            console.long("........");
+            console.log(elemento.children);//hijas 
+
+            console.log("childNodes");
+            console.log("..........");
+            console.log(elemento.childNodes);//nodos
+        }
+        
+    </script>
+</body>
+</html>

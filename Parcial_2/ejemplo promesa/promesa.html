@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        function proceso() {
+            return new Promise((resolve, reject) => {
+                let n = window.prompt("Teclee su nombre");
+                let a = window.prompt("Teclee su apellido");
+
+                if (n && a) {
+                    resolve({ nombre: n, apellido: a });
+                } else {
+                    reject("Error: Debe ingresar tanto el nombre como el apellido.");
+                }
+            });
+        }
+
+        function concatenar(nom, ape) {
+            let nomMay = nom + " " + ape;
+            window.alert(nomMay);
+        }
+
+        proceso()
+            .then(datos => concatenar(datos.nombre, datos.apellido))
+            .catch(error => window.alert(error));
+    </script>
+</body>
+</html>

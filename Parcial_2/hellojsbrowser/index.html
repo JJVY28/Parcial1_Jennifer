@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pink Force Gym</title>
+    <style>
+        body {
+            display: flex;
+            height: 100vh;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            background-color: #ffe6f2;
+            color: rgb(228, 8, 173);
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        #mensaje {
+            margin-top: 20px;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        button {
+            background-color: fuchsia;
+            color:brown;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background 0.3s ease;
+            font-size: 1.1rem;
+        }
+
+        button:hover {
+            background-color: #b52a6b;
+        }
+    </style>
+</head>
+<body>
+    <h1>" Bienvenida a Pink Force Gym "</h1>
+    <p>¡Un lugar para superarte!</p>
+    
+    <button onclick="mostrarMensaje()">Mostrar Mensaje</button>
+    <p id="mensaje"></p>
+
+    <script src="script.js"></script>
+</body>
+</html>

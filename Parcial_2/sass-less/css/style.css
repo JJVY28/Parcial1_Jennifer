@@ -1,0 +1,27 @@
+.contenedor {
+  background-color:skyblue;
+  color:red;
+  padding: 20px;
+}
+.contenedor h1 {
+  font-size: 2rem;
+
+}
+.contenedor p1 {
+  font-style: arial;
+
+}
+.contenedor p2
+{
+  font-style: italic;
+}
+.contenedor
+{
+  text-align:left;
+}
+.contenedor
+{
+  image-orientation:left;
+}
+
+/*# sourceMappingURL=style.css.map */

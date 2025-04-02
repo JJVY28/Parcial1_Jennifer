@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        function proceso(fun){
+            let n = window.prompt("Teclee su nombre");
+            let a = window.prompt("Teclee su apellido");
+            fun(n,a);
+        }
+
+        function concatenar(nom,ape){
+            let nomMay=nom+ " " +ape;
+            window.alert(nomMay);
+        }
+        proceso(concatenar);
+
+        //concatenar("jennifer "," villatoro");
+    </script>
+</body>
+</html>

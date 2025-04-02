@@ -1,7 +1,8 @@
 Window.onload=function()
 {
+     
 //document.getElementById('btn-producto1').addEventListener('click', function()
- //{
+{
   //  const descripcion1 = "aqui encontraras tops muy comodos para poder usar en todo momento de tu dia no solo para hacer ejercicio debido a su elasticidad y material fabricado.";
     //document.getElementById('descripcion-producto').textContent = descripcion1;
 

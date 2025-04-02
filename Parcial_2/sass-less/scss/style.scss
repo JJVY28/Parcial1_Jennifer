@@ -1,0 +1,24 @@
+$color-primario:rgba(255, 0, 0, 0.651) ;  // Variable en SASS
+
+.contenedor
+ {
+    background-color: $color-primario;
+    color:blue;
+    padding: 20px;
+
+    h1 
+    {
+        font-size: 2rem;
+    }
+
+    p
+    {
+        font-style: arial;
+    }
+    p
+    {
+        font-style: italic;
+    }
+    image-orientation: center;
+
+}
