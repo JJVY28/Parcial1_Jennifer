@@ -68,6 +68,54 @@ class ApiService {
       throw Exception('Error al verificar humedad: ${response.statusCode} ${response.body}');
     }
   }
+
+  /// Guardar planta en el servidor para verla luego en "Mis Plantas"
+  Future<Map<String, dynamic>> guardarPlanta({
+    required String plantName,
+    required String plantType,
+    required String userName,
+    required String customPlantName,
+    required String telefono,
+    required String correo,
+  }) async {
+    final url = Uri.parse('$baseUrl/registrarPlanta');
+    final body = json.encode({
+      'plantName': plantName,
+      'plantType': plantType,
+      'userName': userName,
+      'customPlantName': customPlantName,
+      'telefono': telefono,
+      'correo': correo,
+    });
+
+    final response = await http.post(
+      url,
+      headers: {'Content-Type': 'application/json'},
+      body: body,
+    );
+
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('Error al guardar planta: ${response.statusCode} ${response.body}');
+    }
+  }
+
+  /// Método para obtener las plantas de un usuario dado su correo
+  Future<List<dynamic>> obtenerMisPlantas(String correo) async {
+    final url = Uri.parse('$baseUrl/obtenerPlantas?correo=$correo');
+
+    final response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      final decoded = json.decode(response.body);
+      if (decoded['success'] == true) {
+        return decoded['plantas'];
+      } else {
+        throw Exception(decoded['mensaje'] ?? 'Error al obtener plantas');
+      }
+    } else {
+      throw Exception('Error al obtener plantas: HTTP ${response.statusCode}');
+    }
+  }
 }
-
-

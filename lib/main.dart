@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'api_service.dart'; // Asegúrate de tener esta importación arriba
+import 'mis_plantas_screen.dart';
+
 
 
 void main() => runApp(const EcoGrowApp());
@@ -146,7 +148,6 @@ class CategoriaSelector extends StatelessWidget {
       'flores': 'assets/images/flores.jpeg',
     };
 
-    // 🎨 Color único para cada caja según categoría
     final coloresTarjeta = {
       'aromaticas': const Color(0xFF81C784),   // Verde menta
       'hortalizas': const Color.fromARGB(218, 177, 111, 36),   // Naranja suave
@@ -176,41 +177,94 @@ class CategoriaSelector extends StatelessWidget {
         child: SafeArea(
           child: ListView(
             padding: const EdgeInsets.all(16),
-            children: categorias.map((cat) {
-              return GestureDetector(
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => PlantasPorCategoria(tipo: cat, titulo: nombres[cat]!),
-                  ),
+            children: [
+              ElevatedButton.icon(
+                icon: const Icon(Icons.spa_outlined),
+                label: const Text("Ver mis plantas 🌿"),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  foregroundColor: Colors.teal.shade800,
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                  textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
-                child: Card(
-                  color: coloresTarjeta[cat], // ✅ color personalizado para cada categoría
-                  elevation: 8,
-                  margin: const EdgeInsets.symmetric(vertical: 14),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                  child: Column(
-                    children: [
-                      ClipRRect(
-                        borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-                        child: Image.asset(imagenes[cat]!, height: 180, width: double.infinity, fit: BoxFit.cover),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(14),
-                        child: Text(
-                          nombres[cat]!,
-                          style: const TextStyle(
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      final correoController = TextEditingController();
+                      return AlertDialog(
+                        title: const Text("🔍 Buscar tus plantas"),
+                        content: TextField(
+                          controller: correoController,
+                          keyboardType: TextInputType.emailAddress,
+                          decoration: const InputDecoration(labelText: "Ingresa tu correo"),
                         ),
-                      )
-                    ],
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.pop(context),
+                            child: const Text("Cancelar"),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              final correo = correoController.text.trim();
+                              if (correo.isNotEmpty) {
+                                Navigator.pop(context);
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => MisPlantasScreen(correoUsuario: correo),
+                                  ),
+                                );
+                              }
+                            },
+                            child: const Text("Buscar"),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+              ),
+              const SizedBox(height: 20),
+
+              // 🔽 Tarjetas de categoría
+              ...categorias.map((cat) {
+                return GestureDetector(
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => PlantasPorCategoria(tipo: cat, titulo: nombres[cat]!),
+                    ),
                   ),
-                ),
-              );
-            }).toList(),
+                  child: Card(
+                    color: coloresTarjeta[cat],
+                    elevation: 8,
+                    margin: const EdgeInsets.symmetric(vertical: 14),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                    child: Column(
+                      children: [
+                        ClipRRect(
+                          borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+                          child: Image.asset(imagenes[cat]!, height: 180, width: double.infinity, fit: BoxFit.cover),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(14),
+                          child: Text(
+                            nombres[cat]!,
+                            style: const TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                );
+              }).toList(),
+            ],
           ),
         ),
       ),
@@ -479,7 +533,6 @@ class DetallePlanta extends StatelessWidget {
   }
 }
 
-
 class PlantarDialog extends StatelessWidget {
   final Plant planta;
 
@@ -526,98 +579,108 @@ class PlantarDialog extends StatelessWidget {
           onPressed: () => Navigator.pop(context),
           child: const Text('Cancelar'),
         ),
-       ElevatedButton(
-  onPressed: () async {
-    final nombre = nombreController.text.trim();
-    final correo = correoController.text.trim();
-    final telefono = telefonoController.text.trim();
-    final personalizado = nombrePersonalizadoController.text.trim();
+        ElevatedButton(
+          onPressed: () async {
+            final nombre = nombreController.text.trim();
+            final correo = correoController.text.trim();
+            final telefono = telefonoController.text.trim();
+            final personalizado = nombrePersonalizadoController.text.trim();
 
-    if (nombre.isEmpty || correo.isEmpty || telefono.isEmpty || personalizado.isEmpty) {
-      await showDialog(
-        context: context,
-        builder: (_) => AlertDialog(
-          title: const Text("⚠️ Campos incompletos"),
-          content: const Text("Por favor, completa todos los campos."),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: const Text("Aceptar"),
-            ),
-          ],
+            if (nombre.isEmpty || correo.isEmpty || telefono.isEmpty || personalizado.isEmpty) {
+              await showDialog(
+                context: context,
+                builder: (_) => AlertDialog(
+                  title: const Text("⚠️ Campos incompletos"),
+                  content: const Text("Por favor, completa todos los campos."),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      child: const Text("Aceptar"),
+                    ),
+                  ],
+                ),
+              );
+              return;
+            }
+
+            try {
+              final respuesta = await apiService.enviarFormulario(
+                plantName: planta.nombre,
+                plantType: planta.tipo,
+                userName: nombre,
+                customPlantName: personalizado,
+                telefono: telefono,
+                correo: correo,
+              );
+
+              if (respuesta['success'] == true) {
+                final humedad = await apiService.verificarHumedad(
+                  plantType: planta.tipo,
+                  correo: correo,
+                  userName: nombre,
+                  customPlantName: personalizado,
+                );
+
+                // 🔹 PASO 4: Guardar en el backend
+                await apiService.guardarPlanta(
+                  plantName: planta.nombre,
+                  plantType: planta.tipo,
+                  userName: nombre,
+                  customPlantName: personalizado,
+                  telefono: telefono,
+                  correo: correo,
+                );
+
+                await showDialog(
+                  context: context,
+                  builder: (_) => AlertDialog(
+                    title: const Text("✅ Planta registrada"),
+                    content: Text(humedad['mensaje'] ?? "Planta registrada con éxito."),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop(); // Cierra el diálogo
+                          Navigator.of(context).pop(); // Cierra el modal de registro
+                        },
+                        child: const Text("Aceptar"),
+                      ),
+                    ],
+                  ),
+                );
+              } else {
+                await showDialog(
+                  context: context,
+                  builder: (_) => AlertDialog(
+                    title: const Text("❌ Error"),
+                    content: Text(respuesta['mensaje'] ?? "Error al registrar la planta."),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.of(context).pop(),
+                        child: const Text("Aceptar"),
+                      ),
+                    ],
+                  ),
+                );
+              }
+            } catch (e) {
+              await showDialog(
+                context: context,
+                builder: (_) => AlertDialog(
+                  title: const Text("❌ Error de conexión"),
+                  content: Text("Ocurrió un error: $e"),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      child: const Text("Aceptar"),
+                    ),
+                  ],
+                ),
+              );
+            }
+          },
+          child: const Text('Registrar'),
         ),
-      );
-      return;
-    }
-
-    try {
-      final respuesta = await apiService.enviarFormulario(
-        plantName: planta.nombre,
-        plantType: planta.tipo,
-        userName: nombre,
-        customPlantName: personalizado,
-        telefono: telefono,
-        correo: correo,
-      );
-
-      if (respuesta['success'] == true) {
-        final humedad = await apiService.verificarHumedad(
-          plantType: planta.tipo,
-          correo: correo,
-          userName: nombre,
-          customPlantName: personalizado,
-        );
-
-        await showDialog(
-          context: context,
-          builder: (_) => AlertDialog(
-            title: const Text("✅ Planta registrada"),
-            content: Text(humedad['mensaje'] ?? "Planta registrada con éxito."),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop(); // Cierra el diálogo
-                  Navigator.of(context).pop(); // Cierra el modal de registro
-                },
-                child: const Text("Aceptar"),
-              ),
-            ],
-          ),
-        );
-      } else {
-        await showDialog(
-          context: context,
-          builder: (_) => AlertDialog(
-            title: const Text("❌ Error"),
-            content: Text(respuesta['mensaje'] ?? "Error al registrar la planta."),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(),
-                child: const Text("Aceptar"),
-              ),
-            ],
-          ),
-        );
-      }
-    } catch (e) {
-      await showDialog(
-        context: context,
-        builder: (_) => AlertDialog(
-          title: const Text("❌ Error de conexión"),
-          content: Text("Ocurrió un error: $e"),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: const Text("Aceptar"),
-            ),
-          ],
-        ),
-      );
-    }
-  },
-  child: const Text('Registrar'),
-),
-]
-);
-}
+      ],
+    );
+  }
 }
