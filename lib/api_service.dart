@@ -103,10 +103,14 @@ class ApiService {
 
   /// Método para obtener las plantas de un usuario dado su correo
   Future<List<dynamic>> obtenerMisPlantas(String correo) async {
-    final url = Uri.parse('$baseUrl/obtenerPlantas?correo=$correo');
+    final url = Uri.parse('$baseUrl/misPlantas');
+  final body = json.encode({'correo': correo});
 
-    final response = await http.get(url);
-
+  final response = await http.post(
+    url,
+    headers: {'Content-Type': 'application/json'},
+    body: body,
+  );
     if (response.statusCode == 200) {
       final decoded = json.decode(response.body);
       if (decoded['success'] == true) {
