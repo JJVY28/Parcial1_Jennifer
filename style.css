@@ -1,0 +1,298 @@
+/* Estilos generales */
+body {
+  font-family: 'Angsana New', sans-serif; /* Fuente moderna y limpia */
+  margin: 0;
+  padding: 0;
+  background-color: #dae8e5; /* Fondo suave, verde pastel */
+  color: #38514c;
+  text-align: center;
+}
+
+/* Estilo del encabezado */
+header {
+  font-family: 'Broadway', sans-serif; /* Fuente moderna y limpia */
+  background-color: #00796b; /* Verde principal para el encabezado */
+  color: white;
+  padding: 30px;
+  font-size: 3em;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+header p {
+  font-family: 'Times New Roman', sans-serif; /* Fuente clásica */
+  font-size: 0.8em;
+  margin-top: 50px;
+  font-weight: 50;
+}
+
+/* Estado de humedad */
+.status {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  font-size: 1.5em;
+  background-color: #009688;
+  margin-top: 10px;
+  border-radius: 2px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+.humidity h2 {
+  font-family: 'Colonna MT', sans-serif;
+  font-size: 3.2em;
+  color: #3d3d3d;
+  font-weight: 700;
+  margin: 0;
+}
+
+.notification button {
+  background-color: #2e7d32;
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  font-size: 1.2em;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-left: 20px;
+}
+
+.notification button:hover {
+  background-color: #f504cd;
+}
+
+/* Menú de navegación */
+.menu {
+  background-color: #80cbc4;
+  padding: 30px 20px;
+  text-align: center;
+}
+
+/* Letras de clasificaciones */
+.menu ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+}
+
+.menu li {
+  display: inline;
+}
+
+/* Colores y tamaños de clasificaciones */
+.menu a {
+  text-decoration: none;
+  color: #553824;
+  font-weight: 500;
+  font-size: 3.5em;
+  transition: color 0.3s;
+}
+
+.menu a:hover {
+  color: #a02f75;
+}
+
+/* Estilo categorías de plantas (espacio entre cajas) */
+.plant-category {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  justify-content: center;
+  margin-top: 50px;
+}
+
+/* Estilo de la caja de cada planta */
+.plant {
+  background-color: #beaf6b9c;
+  border: 2px solid #00796b;
+  border-radius: 20px;
+  padding: 10px;
+  width: 400px;
+  box-shadow: 0 4px 8px rgba(255, 231, 11, 0.836);
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.2s ease, border-color 0.3s;
+  font-weight: 500;
+}
+
+.plant:hover {
+  transform: scale(1.05);
+  border-color: #da239d;
+}
+
+/* Tamaño y estilo de imagen */
+.plant img {
+  border-radius: 10px;
+  max-width: 100%;
+  height: 300px;
+  object-fit: cover;
+  margin-bottom: 10px;
+}
+
+/* Color y tamaño del nombre de planta */
+.plant h3 {
+  margin: 20px;
+  color: #00796b;
+  font-size: 2.5em;
+}
+
+/* Botón plantar */
+.plant button {
+  background-color: #00796b;
+  color: white;
+  border: none;
+  padding: 15px 24px;
+  border-radius: 50px;
+  font-size: 1.1em;
+  width: 100%;
+  cursor: pointer;
+}
+
+.plant button:hover {
+  background-color: #23855c;
+}
+
+/* Modal */
+#plantModal {
+  display: none; /* Oculto por defecto */
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  width: 100vw;
+  height: 100vh;
+
+}
+
+/* Cuadro del formulario modal */
+.modal-content {
+  background-color: #11d3b9;
+  padding: 40px;
+  border-radius: 15px;
+  width: 90%;
+  max-width: 600px;
+  text-align: center;
+  font-family: 'Segoe UI', sans-serif;
+  color: #000000;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+  margin: 20px;
+}
+
+.modal-content h2 {
+  font-size: 2.5em;
+  margin-bottom: 20px;
+}
+
+.modal-content label {
+  display: block;
+  text-align: left;
+  font-size: 1.5em;
+  margin-bottom: 10px;
+  color: #004d40;
+}
+
+.modal-content input {
+  width: 80%;
+  padding: 15px;
+  font-size: 1.2em;
+  border: 2px solid #00897b;
+  border-radius: 30px;
+  margin-bottom: 20px;
+}
+
+.modal-content button {
+  background-color: #3a775f;
+  color: white;
+  padding: 15px;
+  font-size: 1.5em;
+  border: none;
+  border-radius: 8px;
+  width: 100%;
+  margin-top: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.modal-content button:hover {
+  background-color: #786ac7;
+}
+
+/* Estilo responsivo para pantallas pequeñas */
+@media (max-width: 600px) {
+  .modal-content {
+    width: 95%;
+    padding: 20px;
+  }
+
+  .modal-content h2 {
+    font-size: 2em;
+  }
+
+  .modal-content label,
+  .modal-content input,
+  .modal-content button {
+    font-size: 1.2em;
+  }
+}
+
+/* Estilo footer */
+footer {
+  background-color: #00796b;
+  color: white;
+  text-align: center;
+  padding: 15px;
+  font-size: 30px;
+}
+
+footer a {
+  color: #009e74;
+  text-decoration: none;
+}
+
+footer a:hover {
+  color: white;
+}
+
+/* Clase para ocultar elementos */
+.hidden {
+  display: none;
+}
+
+/* Estilo general para detalles de planta */
+.plant-details {
+  text-align: left;
+  padding: 10px 20px;
+  margin-top: 10px;
+}
+
+.plant-details p {
+  font-size: 1.6em;
+  color: #0d1917;
+  margin: 8px 0;
+  line-height: 1.8;
+  font-weight: 500;
+}
+
+/* Estilos para los títulos de cada sección */
+#aromaticas h1,
+#hortalizas h1,
+#flores h1 {
+  font-size: 3em;
+  color: #00796b;
+  text-align: center;
+  margin-top: 60px;
+  margin-bottom: 30px;
+  font-weight: bold;
+}

@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>EcoGrow - Tu planta inteligente</title>
+  <link rel="stylesheet" href="style.css" />
+  <script defer>
+    // Función para obtener humedad
+    function obtenerHumedad() 
+    {
+      const url = `https://api.thingspeak.com/channels/2943187/fields/1.json?api_key=COY6HRV8L9KUVU4J&results=1`;
+      fetch(url)
+        .then(response => response.json())
+        .then(data => {
+          const humedadStr = data.feeds[0].field1;
+          if (!humedadStr || isNaN(humedadStr)) {
+            document.getElementById("humidity-percentage").innerText = "Sin datos";
+            return;
+          }
+          const humedad = parseFloat(humedadStr);
+          document.getElementById("humidity-percentage").innerText = `${humedad}%`;
+        })
+        .catch(error => {
+          console.error("Error al obtener los datos:", error);
+          document.getElementById("humidity-percentage").innerText = "Error";
+        });
+    }
+
+    // Función para enviar notificaciones
+    function enviarNotificacion(mensaje) 
+    {
+      alert(mensaje); // Cambiar por WhatsApp, Telegram, etc.
+    }
+
+    // Mostrar detalles de la planta
+    function mostrarInformacion(id) 
+    {
+      const planta = document.getElementById(id);
+      const detalles = planta.querySelector('.plant-details');
+      document.querySelectorAll('.plant-details').forEach(detalle => {
+        if (detalle !== detalles) detalle.classList.add('hidden');
+      });
+      detalles.classList.toggle('hidden');
+    }
+
+    // Mostrar el formulario para sembrar una planta
+    function plantar(plantaNombre)
+    {
+      document.getElementById("plantModal").style.display = "block";
+      document.getElementById("plantName").value = plantaNombre;
+
+      const plantTypeInput = document.getElementById('plantType');
+      let tipo = '';
+
+      if (['hierbabuena', 'menta', 'romero', 'ruda'].includes(plantaNombre.toLowerCase())) 
+      {
+        tipo = 'aromaticas';
+      } 
+      else if (['tomate', 'lechuga', 'zanahoria', 'chile verde', 'cebolla', 'cilantro'].includes(plantaNombre.toLowerCase())) 
+      {
+        tipo = 'hortalizas';
+      }
+      else if (['orquídea', 'rosa negra', 'corona de cristo', 'periskia', 'cactus estrella', 'suculenta'].includes(plantaNombre.toLowerCase())) 
+      {
+        tipo = 'flores';
+      } 
+      else 
+      {
+        tipo = 'otro';
+      }
+
+      plantTypeInput.value = tipo;
+    }
+
+    // Manejar el envío del formulario
+    function enviarFormulario(event) 
+    {
+      event.preventDefault(); 
+      
+      const nombrePlanta = document.getElementById("plantName").value;
+      const tipoPlanta = document.getElementById("plantType").value;
+      const userName = document.getElementById("userName").value.trim();
+      const customPlantName = document.getElementById("customPlantName").value.trim();
+      const telefono = document.getElementById("telefono").value.trim();
+      const correo = document.getElementById("correo").value.trim();
+
+      if(!userName || !customPlantName || !telefono || !correo) {
+        alert("Por favor, llena todos los campos antes de enviar.");
+        return;
+      }
+
+      const data = {
+        plantName: nombrePlanta,
+        plantType: tipoPlanta,
+        userName,
+        customPlantName,
+        telefono,
+        correo
+      };
+
+      fetch("https://parcial1-jennifer.onrender.com/enviarCorreo", { 
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data) 
+      })
+      .then(response => {
+        if (!response.ok) throw new Error('Error al enviar el correo');
+        return response.json();
+      })
+      .then(() => {
+        // Después de enviar el correo, verificar humedad y mostrar alerta
+      // Fragmento actualizado para fetch en frontend.js o inline script
+fetch("https://parcial1-jennifer.onrender.com/verificar-humedad", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    plantType: tipoPlanta,
+    correo: correo,
+    userName: userName,
+    customPlantName: customPlantName
+  })
+})
+      })
+      .then(response => response.json())
+      .then(data => {
+        // Personalizar el mensaje para que incluya el nombre del usuario y el nombre personalizado de la planta
+        const humedadActual = data.mensaje.match(/(\d+\.?\d*)%/); // Extraemos humedad %
+        const humedadTexto = humedadActual ? humedadActual[1] + "%" : "desconocida";
+        const mensajePersonalizado = `Hola ${userName}, tu planta "${customPlantName}" (tipo: ${tipoPlanta}) tiene una humedad actual de ${humedadTexto}.\n\n${data.mensaje.includes('fuera del rango') ? '⚠️ ¡Revisa tu sistema de riego!' : '✅ La humedad está dentro del rango ideal.'}`;
+        alert(mensajePersonalizado);
+        cerrarModal();
+      })
+      .catch(error => {
+        console.error("Error:", error);
+        alert("Ocurrió un error al enviar los datos o la alerta");
+        cerrarModal();
+      });
+    }
+
+    function cerrarModal() {
+      document.getElementById("plantModal").style.display = "none";
+      document.getElementById("plantForm").reset();
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      obtenerHumedad(); 
+      setInterval(obtenerHumedad, 60000); 
+
+      const form = document.getElementById("plantForm");
+      if (form) {
+        form.addEventListener("submit", enviarFormulario);
+      }
+    });
+  </script>
+  
+</head>
+<body>
+
+<header>  
+  <div class="logo">
+    <h1>Bienvenido a EcoGrow</h1>
+    <p>Monitorea el estado de tus plantas y cuídalas como nunca.</p>
+  </div>
+</header>
+
+<main>
+  <section class="status">
+    <div class="humidity">
+      <h2>Humedad actual: <span id="humidity-percentage">Cargando...</span></h2>
+    </div>
+  </section>
+  
+  <nav class="menu">
+    <ul>
+      <li><a href="#aromaticas">Especies Aromáticas</a></li>
+      <li><a href="#hortalizas">Hortalizas</a></li>
+      <li><a href="#flores">Flores Exóticas</a></li>
+      <li><a href="#misplantas" onclick="mostrarMisPlantas()">Mis Plantas</a></li>
+    </ul>
+  </nav>
+
+  <section id="aromaticas">
+    <h1>Especies Aromáticas</h1>
+    <div class="plant-category">
+      <div class="plant" id="plant1">
+        <h3>Hierbabuena</h3>
+        <img src="hiervabuena.jpg" width="200" alt="Hierbabuena" onclick="mostrarInformacion('plant1')">
+        <div class="plant-details hidden">
+          <p>Tiempo de crecimiento: 2-3 meses</p>
+          <p>Humedad ideal: 60-70%</p>
+          <p>Curiosidades: Usada en infusiones y como condimento.</p>
+        </div>
+        <button onclick="plantar('Hierbabuena')">Plantar</button>
+      </div>
+      <div class="plant" id="plant2">
+        <h3>Menta</h3>
+        <img src="menta.jpg" width="200" alt="Menta" onclick="mostrarInformacion('plant2')">
+        <div class="plant-details hidden">
+          <p>Tiempo de crecimiento: 2-3 meses</p>
+          <p>Humedad ideal: 60-70%</p>
+          <p>Curiosidades: Relaja el sistema digestivo.</p>
+        </div>
+        <button onclick="plantar('Menta')">Plantar</button>
+      </div>
+      <div class="plant" id="plant3">
+        <h3>Romero</h3>
+        <img src="romero.jpg" width="200" alt="Romero" onclick="mostrarInformacion('plant3')">
+        <div class="plant-details hidden">
+          <p>Tiempo de crecimiento: 6-12 meses</p>
+          <p>Humedad ideal: 50-60%</p>
+          <p>Curiosidades: Utilizado para aromatizar carnes.</p>
+        </div>
+        <button onclick="plantar('Romero')">Plantar</button>
+      </div>
+      <div class="plant" id="plant4">
+        <h3>Ruda</h3>
+        <img src="ruda.jpg" width="200" alt="Ruda" onclick="mostrarInformacion('plant4')">
+        <div class="plant-details hidden">
+          <p>Tiempo de crecimiento: 3-6 meses</p>
+          <p>Humedad ideal: 50-60%</p>
+          <p>Curiosidades: Usada en rituales de protección.</p>
+        </div>
+        <button onclick="plantar('Ruda')">Plantar</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="hortalizas">
+    <h1>Hortalizas</h1>
+    <div class="plant-category">
+      <div class="plant" id="plant5">
+        <h3>Chile Verde</h3>
+        <img src="chileverde.jpg" width="200" alt="Chile Verde" onclick="mostrarInformacion('plant5')">
+        <div class="plant-details hidden">
+          <p>Tiempo de crecimiento: 2-3 meses</p>
+          <p>Humedad ideal: 60-70%</p>
+          <p>Curiosidades: Muy usado en la cocina mexicana.</p>
+        </div>
+        <button onclick="plantar('Chile Verde')">Plantar</button>
+      </div>
+      <div class="plant" id="plant6">
+        <h3>Tomate</h3>
+        <img src="tomate.jpg" width="200" alt="Tomate" onclick="mostrarInformacion('plant6')">
+        <div class="plant-details hidden">
+          <p>Tiempo de crecimiento: 2-3 meses</p>
+          <p>Humedad ideal: 60-80%</p>
+          <p>Curiosidades: Rico en antioxidantes.</p>
+        </div>
+        <button onclick="plantar('Tomate')">Plantar</button>
+      </div>
+      <div class="plant" id="plant7">
+        <h3>Cebolla</h3>
+        <img src="cebolla.jpg" width="200" alt="Cebolla" onclick="mostrarInformacion('plant7')">
+        <div class="plant-details hidden">
+          <p>Tiempo de crecimiento: 6-12 meses</p>
+          <p>Humedad ideal: 50-70%</p>
+          <p>Curiosidades: Muy aromática al cocinarse.</p>
+        </div>
+        <button onclick="plantar('Cebolla')">Plantar</button>
+      </div>
+      <div class="plant" id="plant8">
+        <h3>Cilantro</h3>
+        <img src="cilantro.jpg" width="200" alt="Cilantro" onclick="mostrarInformacion('plant8')">
+        <div class="plant-details hidden">
+          <p>Tiempo de crecimiento: 3-6 meses</p>
+          <p>Humedad ideal: 60-70%</p>
+          <p>Curiosidades: Ideal para sopas y guisos.</p>
+        </div>
+        <button onclick="plantar('Cilantro')">Plantar</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="flores"> 
+    <h1>Flores Exóticas</h1>
+    <div class="plant-category">
+      <div class="plant" id="plant9">
+        <h3>Corona de Cristo</h3>
+        <img src="coronadecristo.jpg" width="200" alt="Corona de Cristo" onclick="mostrarInformacion('plant9')">
+        <div class="plant-details hidden">
+          <p>Tiempo de crecimiento: 2-3 meses</p>
+          <p>Humedad ideal: 50-60%</p>
+          <p>Curiosidades: Muy decorativa y resistente.</p>
+        </div>
+        <button onclick="plantar('Corona de Cristo')">Plantar</button>
+      </div>
+      <div class="plant" id="plant10">
+        <h3>Periskia</h3>
+        <img src="perizquia.jpg" width="200" alt="Periskia" onclick="mostrarInformacion('plant10')">
+        <div class="plant-details hidden">
+          <p>Tiempo de crecimiento: 2-3 meses</p>
+          <p>Humedad ideal: 60-70%</p>
+          <p>Curiosidades: Planta resistente al sol.</p>
+        </div>
+        <button onclick="plantar('Periskia')">Plantar</button>
+      </div>
+      <div class="plant" id="plant11">
+        <h3>Cactus Estrella</h3>
+        <img src="captusestrella.jpg" width="200" alt="Cactus Estrella" onclick="mostrarInformacion('plant11')">
+        <div class="plant-details hidden">
+          <p>Tiempo de crecimiento: 2-3 años</p>
+          <p>Humedad ideal: 30-50%</p>
+          <p>Curiosidades: Resistente a la sequía.</p>
+        </div>
+        <button onclick="plantar('Cactus Estrella')">Plantar</
+button>
+</div>
+<div class="plant" id="plant12">
+<h3>Suculenta</h3>
+<img src="suculenta.jpg" width="200" alt="Suculenta" onclick="mostrarInformacion('plant12')">
+<div class="plant-details hidden">
+<p>Tiempo de crecimiento: 6 -12 meses</p>
+<p>Humedad ideal: 40-60%</p>
+<p>Curiosidades: Su nombre significa savia o jugo, y de sus hojas gruesas y saviadas.</p>
+</div>
+<button onclick="plantar('Suculenta')">Plantar</button>
+</div>
+</div>
+
+<section id="misplantas">
+  <h2>🌱 Mis Plantas Registradas</h2>
+  <div style="margin-bottom: 10px;">
+    <label for="correoConsulta">Introduce tu correo para ver tus plantas:</label>
+    <input type="email" id="correoConsulta" placeholder="tucorreo@ejemplo.com">
+    <button onclick="mostrarMisPlantas()">Buscar</button>
+  </div>
+  <div id="resultadoPlantas" class="plant-category"></div>
+</section>
+
+</section> </main> <footer> <h3>&copy; 2025 EcoGrow - Todos los derechos reservados.</h3> <p>Diseñado con <span style="color: red;">❤️</span> para cuidar el planeta.</p> </footer> <!-- Modal de Plantar --> <div id="plantModal"> <div class="modal-content"> <h2>Formulario de Siembra</h2> <form id="plantForm"> <div class="form-group"> <label for="plantName">Planta:</label> <input type="text" id="plantName" name="plantName" readonly> </div>
+  <div class="form-group">
+    <label for="plantType">Tipo de planta:</label>
+    <input type="text" id="plantType" name="plantType" readonly>
+  </div>
+
+  <div class="form-group">
+    <label for="userName">Tu nombre:</label>
+    <input type="text" id="userName" name="userName" required>
+  </div>
+
+  <div class="form-group">
+    <label for="customPlantName">Nombra a tu planta:</label>
+    <input type="text" id="customPlantName" name="customPlantName" required>
+  </div>
+
+  <div class="form-group">
+    <label for="telefono">Teléfono:</label>
+    <input type="text" id="telefono" name="telefono" required>
+  </div>
+
+  <div class="form-group">
+    <label for="correo">Correo:</label>
+    <input type="email" id="correo" name="correo" required>
+  </div>
+
+  <button type="submit">Enviar</button>
+</form>
+<button type="button" onclick="cerrarModal()">Cerrar</button>
+</div> </div> <script> // Mostrar detalles de plantas (toggle) function mostrarInformacion(id) { const planta = document.getElementById(id); const detalles = planta.querySelector('.plant-details'); document.querySelectorAll('.plant-details').forEach(detalle => { if (detalle !== detalles) detalle.classList.add('hidden'); }); detalles.classList.toggle('hidden'); } // Función para cerrar modal y limpiar formulario function cerrarModal() { document.getElementById("plantModal").style.display = "none"; document.getElementById("plantForm").reset(); } </script> <!-- EmailJS (si lo usas) --> <script src="https://cdn.emailjs.com/dist/email.min.js"></script> <script> emailjs.init("service_mwivj66"); </script> </body> </html> ```
