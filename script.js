@@ -1,3 +1,4 @@
+// Enviar formulario de registro de planta
 function enviarFormulario(event) {
   event.preventDefault();
 
@@ -60,21 +61,46 @@ function enviarFormulario(event) {
 
 // Cierra el modal y limpia el formulario
 function cerrarModal() {
-  const modal = document.getElementById("plantModal"); // Corregido a tu modal real
+  const modal = document.getElementById("plantModal");
   if (modal) {
     modal.style.display = "none";
     document.getElementById("plantForm").reset();
   }
 }
 
-// 🔹 FUNCIONES PARA "MIS PLANTAS"
-
-function mostrarMisPlantas() {
+// --- GESTIÓN DE USUARIO (correo) ---
+// Guardar correo y mostrar plantas
+function guardarCorreo() {
   const correo = document.getElementById("correoConsulta").value.trim();
-  if (!correo) {
-    alert("Por favor, ingresa tu correo.");
-    return;
-  }
+  if (!correo) return alert("⚠️ Ingresa un correo válido.");
+  localStorage.setItem("correoUsuario", correo);
+  document.getElementById("correoConsulta").value = "";
+  cargarPanelUsuario();
+  mostrarMisPlantas();
+}
+
+// Mostrar correo actual y ocultar login
+function cargarPanelUsuario() {
+  const correo = localStorage.getItem("correoUsuario");
+  if (!correo) return;
+
+  document.getElementById("loginCorreo").style.display = "none";
+  document.getElementById("panelUsuario").style.display = "block";
+  document.getElementById("correoActual").textContent = correo;
+}
+
+// Cerrar sesión
+function cerrarSesion() {
+  localStorage.removeItem("correoUsuario");
+  document.getElementById("loginCorreo").style.display = "block";
+  document.getElementById("panelUsuario").style.display = "none";
+  document.getElementById("resultadoPlantas").innerHTML = "";
+}
+
+// Mostrar las plantas registradas del correo guardado
+function mostrarMisPlantas() {
+  const correo = localStorage.getItem("correoUsuario");
+  if (!correo) return;
 
   fetch("https://parcial1-jennifer.onrender.com/misPlantas", {
     method: "POST",
@@ -87,7 +113,7 @@ function mostrarMisPlantas() {
     contenedor.innerHTML = "";
 
     if (!data.success || data.plantas.length === 0) {
-      contenedor.innerHTML = "<p>No se encontraron plantas registradas con ese correo.</p>";
+      contenedor.innerHTML = "<p>No se encontraron plantas registradas.</p>";
       return;
     }
 
@@ -97,14 +123,19 @@ function mostrarMisPlantas() {
       const rango = obtenerRango(planta.planttype);
       const estado = humedad < rango.min || humedad > rango.max ? "⚠️ Fuera de rango" : "✅ En rango";
 
+      // Generar ruta de imagen según plantname (sin espacios y en minúsculas)
+      const nombreImagen = planta.plantname.toLowerCase().replace(/\s/g, "") + ".jpg";
+
       const tarjeta = document.createElement("div");
       tarjeta.classList.add("plant");
       tarjeta.innerHTML = `
-        <h3>${planta.customPlantName}</h3>
-        <p><strong>Planta:</strong> ${planta.plantName}</p>
-        <p><strong>Tipo:</strong> ${planta.plantType}</p>
+        <h3>${planta.customplantname}</h3>
+        <img src="${nombreImagen}" alt="${planta.plantname}" width="200" style="margin-bottom:10px;">
+        <p><strong>Planta:</strong> ${planta.plantname}</p>
+        <p><strong>Tipo:</strong> ${planta.planttype}</p>
         <p><strong>Humedad actual:</strong> ${humedad}%</p>
         <p><strong>Estado:</strong> ${estado}</p>
+        <button onclick="eliminarPlanta(${planta.id})" style="background:#e74c3c; color:white; border:none; padding:5px 10px; cursor:pointer;">🗑️ Eliminar</button>
       `;
       contenedor.appendChild(tarjeta);
     });
@@ -115,6 +146,27 @@ function mostrarMisPlantas() {
   });
 }
 
+// Función para eliminar planta por id
+function eliminarPlanta(id) {
+  if (!confirm("¿Seguro que quieres eliminar esta planta?")) return;
+
+  fetch("https://parcial1-jennifer.onrender.com/eliminarPlanta", {
+    method: "DELETE",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ id })
+  })
+  .then(res => res.json())
+  .then(data => {
+    alert(data.mensaje);
+    mostrarMisPlantas(); // Recargar la lista
+  })
+  .catch(err => {
+    console.error("Error al eliminar:", err);
+    alert("❌ No se pudo eliminar la planta.");
+  });
+}
+
+// Obtener humedad actual desde ThingSpeak
 async function obtenerHumedadActual() {
   try {
     const res = await fetch("https://api.thingspeak.com/channels/2943187/fields/1.json?api_key=COY6HRV8L9KUVU4J&results=1");
@@ -126,6 +178,7 @@ async function obtenerHumedadActual() {
   }
 }
 
+// Obtener rango ideal por tipo de planta
 function obtenerRango(tipo) {
   const rangos = {
     aromaticas: { min: 60, max: 90 },
@@ -134,3 +187,9 @@ function obtenerRango(tipo) {
   };
   return rangos[tipo] || { min: 0, max: 100 };
 }
+
+// Al cargar la página, verificar si hay correo guardado y mostrar plantas
+window.onload = () => {
+  cargarPanelUsuario();
+  mostrarMisPlantas();
+};

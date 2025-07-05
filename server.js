@@ -127,6 +127,7 @@ app.post('/registrarPlanta', (req, res) => {
   }
 
   const nuevaPlanta = {
+    id: Date.now(),  // id simple para eliminar después
     plantName,
     plantType,
     userName,
@@ -160,6 +161,24 @@ app.post('/misPlantas', (req, res) => {
   const data = JSON.parse(fs.readFileSync(PLANTAS_FILE, 'utf-8'));
   const resultado = data.filter(p => p.correo === correo);
   return res.json({ success: true, plantas: resultado });
+});
+
+// Eliminar planta por id
+app.delete('/eliminarPlanta', (req, res) => {
+  const { id } = req.body;
+
+  if (!id) return res.status(400).json({ success: false, mensaje: 'ID requerido.' });
+
+  if (!fs.existsSync(PLANTAS_FILE)) {
+    return res.status(400).json({ success: false, mensaje: 'No hay plantas para eliminar.' });
+  }
+
+  let data = JSON.parse(fs.readFileSync(PLANTAS_FILE, 'utf-8'));
+  const nuevoData = data.filter(p => p.id !== id);
+
+  fs.writeFileSync(PLANTAS_FILE, JSON.stringify(nuevoData, null, 2));
+
+  res.json({ success: true, mensaje: '🗑️ Planta eliminada correctamente.' });
 });
 
 // Iniciar servidor

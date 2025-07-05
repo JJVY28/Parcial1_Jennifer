@@ -328,11 +328,17 @@ button>
 
 <section id="misplantas">
   <h2>🌱 Mis Plantas Registradas</h2>
-  <div style="margin-bottom: 10px;">
+    <div id="loginCorreo">
     <label for="correoConsulta">Introduce tu correo para ver tus plantas:</label>
     <input type="email" id="correoConsulta" placeholder="tucorreo@ejemplo.com">
-    <button onclick="mostrarMisPlantas()">Buscar</button>
+    <button onclick="guardarCorreo()">Entrar</button>
   </div>
+
+   <div id="panelUsuario" style="display:none;">
+    <p><strong>Correo:</strong> <span id="correoActual"></span></p>
+    <button onclick="cerrarSesion()">Cerrar sesión</button>
+  </div>  
+
   <div id="resultadoPlantas" class="plant-category"></div>
 </section>
 
