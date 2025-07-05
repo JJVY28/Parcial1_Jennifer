@@ -327,17 +327,18 @@ button>
 </section>
 
 <section id="misplantas">
-  <h2  id="tituloMisPlantas">🌱 Mis Plantas Registradas</h2>
-    <div id="loginCorreo">
-    <label for="correoConsulta">Introduce tu correo para ver tus plantas:</label>
+  <h2 id="tituloMisPlantas">🌱 Mis Plantas Registradas</h2>
+
+  <div id="loginCorreo">
+    <label for="correoConsulta">Introduce tu correo para ver tus plantas:</label><br>
     <input type="email" id="correoConsulta" placeholder="tucorreo@ejemplo.com">
     <button onclick="guardarCorreo()">Entrar</button>
   </div>
 
-   <div id="panelUsuario" style="display:none;">
-    <p><strong>Correo:</strong> <span id="correoActual"></span></p>
+  <div id="panelUsuario" style="display:none; margin-top: 20px;">
+    <p id="correoTexto"><strong>Correo:</strong> <span id="correoActual"></span></p>
     <button id="cerrarSesionBtn" onclick="cerrarSesion()">Cerrar sesión</button>
-  </div>  
+  </div>
 
   <div id="resultadoPlantas" class="plant-category"></div>
 </section>
