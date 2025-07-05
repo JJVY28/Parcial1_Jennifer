@@ -296,3 +296,51 @@ footer a:hover {
   margin-bottom: 30px;
   font-weight: bold;
 }
+/* Título "🌱 Mis Plantas Registradas" */
+#tituloMisPlantas {
+  font-size: 3em;         /* Tamaño grande */
+  font-weight: 700;
+  color: #00796b;
+  margin-bottom: 15px;
+  font-family: 'Broadway', sans-serif; /* Consistencia con header */
+}
+
+/* Texto del correo */
+#correoActual {
+  font-size: 1.5em;
+  color: #38514c;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+/* Botón Cerrar sesión */
+#cerrarSesionBtn {
+  font-size: 1.3em;
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-bottom: 30px;
+}
+
+#cerrarSesionBtn:hover {
+  background-color: #c0392b;
+}
+
+/* Texto dentro de cada tarjeta de planta */
+.plant p {
+  font-size: 1.3em;
+  margin: 8px 0;
+  color: #0d1917;
+  font-weight: 500;
+}
+
+/* Título de cada planta */
+.plant h3 {
+  font-size: 2.2em;
+  color: #00796b;
+  margin-bottom: 15px;
+}
