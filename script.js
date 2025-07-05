@@ -112,7 +112,7 @@ function mostrarMisPlantas() {
     const contenedor = document.getElementById("resultadoPlantas");
     contenedor.innerHTML = "";
 
-    if (!data.success || data.plantas.length === 0) {
+    if (!data.success || !Array.isArray(data.plantas) || data.plantas.length === 0) {
       contenedor.innerHTML = "<p>No se encontraron plantas registradas.</p>";
       return;
     }
@@ -120,22 +120,33 @@ function mostrarMisPlantas() {
     const humedad = await obtenerHumedadActual();
 
     data.plantas.forEach(planta => {
-      const rango = obtenerRango(planta.planttype);
+      // Validar propiedades para evitar undefined
+      const nombrePlantaRaw = planta.plantname || planta.plantName || "";
+      // Convertir a string para evitar error si es undefined/null
+      const nombrePlantaStr = nombrePlantaRaw ? nombrePlantaRaw.toString() : "";
+      const nombrePlanta = nombrePlantaStr.toLowerCase().replace(/\s/g, "");
+      const customPlantName = planta.customplantname || planta.customPlantName || "Sin nombre";
+      const tipoPlanta = planta.planttype || planta.plantType || "desconocido";
+      const idPlanta = planta.id || planta.ID || null;
+
+      // Si no hay id no crear la tarjeta (evitar errores)
+      if (!idPlanta) return;
+
+      const rango = obtenerRango(tipoPlanta);
       const estado = humedad < rango.min || humedad > rango.max ? "⚠️ Fuera de rango" : "✅ En rango";
 
-      // Generar ruta de imagen según plantname (sin espacios y en minúsculas)
-      const nombreImagen = planta.plantname.toLowerCase().replace(/\s/g, "") + ".jpg";
+      const nombreImagen = nombrePlanta + ".jpg";
 
       const tarjeta = document.createElement("div");
       tarjeta.classList.add("plant");
       tarjeta.innerHTML = `
-        <h3>${planta.customplantname}</h3>
-        <img src="${nombreImagen}" alt="${planta.plantname}" width="200" style="margin-bottom:10px;">
-        <p><strong>Planta:</strong> ${planta.plantname}</p>
-        <p><strong>Tipo:</strong> ${planta.planttype}</p>
+        <h3>${customPlantName}</h3>
+        <img src="${nombreImagen}" alt="${nombrePlantaRaw}" width="200" style="margin-bottom:10px;">
+        <p><strong>Planta:</strong> ${nombrePlantaRaw}</p>
+        <p><strong>Tipo:</strong> ${tipoPlanta}</p>
         <p><strong>Humedad actual:</strong> ${humedad}%</p>
         <p><strong>Estado:</strong> ${estado}</p>
-        <button onclick="eliminarPlanta(${planta.id})" style="background:#e74c3c; color:white; border:none; padding:5px 10px; cursor:pointer;">🗑️ Eliminar</button>
+        <button onclick="eliminarPlanta(${idPlanta})" style="background:#e74c3c; color:white; border:none; padding:5px 10px; cursor:pointer;">🗑️ Eliminar</button>
       `;
       contenedor.appendChild(tarjeta);
     });
