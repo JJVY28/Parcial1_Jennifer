@@ -100,9 +100,9 @@ function mostrarMisPlantas() {
       const tarjeta = document.createElement("div");
       tarjeta.classList.add("plant");
       tarjeta.innerHTML = `
-        <h3>${planta.customplantname}</h3>
-        <p><strong>Planta:</strong> ${planta.plantname}</p>
-        <p><strong>Tipo:</strong> ${planta.planttype}</p>
+        <h3>${planta.customPlantName}</h3>
+        <p><strong>Planta:</strong> ${planta.plantName}</p>
+        <p><strong>Tipo:</strong> ${planta.plantType}</p>
         <p><strong>Humedad actual:</strong> ${humedad}%</p>
         <p><strong>Estado:</strong> ${estado}</p>
       `;
