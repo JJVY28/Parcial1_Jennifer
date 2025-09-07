@@ -8,8 +8,8 @@ const imagenesMenu = {
   Cebolla: "images/cebolla.jpg",
   Cilantro: "images/cilantro.jpg",
   "Corona de Cristo": "images/coronadecristo.jpg",
-  Periskia: "images/periskia.jpg",
-  "Cactus Estrella": "images/cactusestrella.jpg",
+  Periskia: "images/Periskia.jpg",
+  "Cactus Estrella": "images/CactusEstrella",
   suculenta: "images/suculenta.jpg",
   "Chile Verde": "images/chileverde.jpg"
 };
