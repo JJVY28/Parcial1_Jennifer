@@ -9,7 +9,7 @@ const imagenesMenu = {
   Cilantro: "images/cilantro.jpg",
   "Corona de Cristo": "images/coronadecristo.jpg",
   Periskia: "images/Periskia.jpg",
-  "Cactus Estrella": "images/CactusEstrella",
+  "Cactus Estrella": "images/CactusEstrella.jpg",
   suculenta: "images/suculenta.jpg",
   "Chile Verde": "images/chileverde.jpg"
 };
