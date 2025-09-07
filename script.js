@@ -154,7 +154,7 @@ function mostrarMisPlantas() {
       const estado = humedad < rango.min || humedad > rango.max ? "⚠️ Fuera de rango" : "✅ En rango";
 
       // Buscar imagen, si no tiene asignada usa default
-     const nombreImagen = planta.imageFile ? "images/" + planta.imageFile : "images/default.jpg";
+      const nombreImagen = planta.imageFile ? planta.imageFile : "images/default.jpg";
 
       const tarjeta = document.createElement("div");
       tarjeta.classList.add("plant");
