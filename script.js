@@ -1,17 +1,18 @@
 const imagenesMenu = {
-  "Hierbabuena": "hiervabuena.jpg",
-  "Menta": "menta.jpg",
-  "Romero": "romero.jpg",
-  "Ruda": "ruda.jpg",
-  "Tomate": "tomate.jpg",
-  "Cebolla": "cebolla.jpg",
-  "Cilantro": "cilantro.jpg",
-  "Corona de Cristo": "coronadecristo.jpg",
-  "Periskia": "periskia.jpg",
-  "Cactus Estrella": "cactusestrella.jpg",
-  "Suculenta": "suculenta.jpg"
+  hierbabuena: "images/hiervabuena.jpg",
+  menta: "images/menta.jpg",
+  romero: "images/romero.jpg",
+  ruda: "images/ruda.jpg",
+  tomate: "images/tomate.jpg",
+  lechuga: "images/lechuga.jpg",
+  cebolla: "images/cebolla.jpg",
+  cilantro: "images/cilantro.jpg",
+  "corona de cristo": "images/coronadecristo.jpg",
+  periskia: "images/periskia.jpg",
+  "cactus estrella": "images/cactusestrella.jpg",
+  suculenta: "images/suculenta.jpg",
+  "chile verde": "images/chileverde.jpg"
 };
-
 // Enviar formulario de registro de planta
 function enviarFormulario(event) {
   event.preventDefault();
@@ -152,7 +153,9 @@ function mostrarMisPlantas() {
       const rango = obtenerRango(tipoPlanta);
       const estado = humedad < rango.min || humedad > rango.max ? "⚠️ Fuera de rango" : "✅ En rango";
 
-      const nombreImagen = planta.imageFile || "default.jpg"; 
+      // Buscar imagen, si no tiene asignada usa default
+      const nombreImagen = planta.imageFile  ? "images/" + planta.imageFile 
+  : "images/default.jpg";
 
       const tarjeta = document.createElement("div");
       tarjeta.classList.add("plant");
