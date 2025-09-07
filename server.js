@@ -120,7 +120,7 @@ app.post('/verificar-humedad', async (req, res) => {
 
 // Registrar planta en archivo local
 app.post('/registrarPlanta', (req, res) => {
-  const { plantName, plantType, userName, customPlantName, telefono, correo } = req.body;
+  const { plantName, plantType, userName, customPlantName, telefono, correo,imageFile } = req.body;
 
   if (!plantName || !plantType || !userName || !customPlantName || !telefono || !correo) {
     return res.status(400).json({ success: false, mensaje: 'Faltan datos para registrar planta.' });
@@ -134,6 +134,7 @@ app.post('/registrarPlanta', (req, res) => {
     customPlantName,
     telefono,
     correo,
+    imageFile: imageFile || "default.jpg", // 🔹 aquí guardamos la imagen
     created_at: new Date().toISOString()
   };
 
