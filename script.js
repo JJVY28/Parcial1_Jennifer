@@ -1,17 +1,17 @@
 const imagenesMenu = {
-  hierbabuena: "images/hiervabuena.jpg",
-  menta: "images/menta.jpg",
-  romero: "images/romero.jpg",
-  ruda: "images/ruda.jpg",
-  tomate: "images/tomate.jpg",
+  Hierbabuena: "images/hiervabuena.jpg",
+  Menta: "images/menta.jpg",
+  Romero: "images/romero.jpg",
+  Ruda: "images/ruda.jpg",
+  Tomate: "images/tomate.jpg",
   lechuga: "images/lechuga.jpg",
-  cebolla: "images/cebolla.jpg",
-  cilantro: "images/cilantro.jpg",
-  "corona de cristo": "images/coronadecristo.jpg",
-  perikia: "images/perizkia.jpg",
-  "cactus estrella": "images/captusestrella.jpg",
+  Cebolla: "images/cebolla.jpg",
+  Cilantro: "images/cilantro.jpg",
+  "Corona de Cristo": "images/coronadecristo.jpg",
+  Periskia: "images/periskia.jpg",
+  "Cactus Estrella": "images/cactusestrella.jpg",
   suculenta: "images/suculenta.jpg",
-  "chile verde": "images/chileverde.jpg"
+  "Chile Verde": "images/chileverde.jpg"
 };
 // Enviar formulario de registro de planta
 function enviarFormulario(event) {
