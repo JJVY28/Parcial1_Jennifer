@@ -1,5 +1,5 @@
 const imagenesMenu = {
-"Hierbabuena": "images/Hierbanuena.jpg",
+  Hierbabuena:"images/Hierbabuena.jpg",
   Menta: "images/menta.jpg",
   Romero: "images/romero.jpg",
   Ruda: "images/ruda.jpg",
