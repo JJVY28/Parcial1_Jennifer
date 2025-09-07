@@ -186,3 +186,4 @@ app.delete('/eliminarPlanta', (req, res) => {
 app.listen(PORT, () => {
   console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
 });
+3 

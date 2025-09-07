@@ -1,18 +1,19 @@
 const imagenesMenu = {
-  hierbabuena: "images/hiervabuena.jpg",
-  menta: "images/menta.jpg",
-  romero: "images/romero.jpg",
-  ruda: "images/ruda.jpg",
-  tomate: "images/tomate.jpg",
-  lechuga: "images/lechuga.jpg",
-  cebolla: "images/cebolla.jpg",
-  cilantro: "images/cilantro.jpg",
+  "hiervabuena": "images/hiervabuena.jpg",
+  "menta": "images/menta.jpg",
+  "romero": "images/romero.jpg",
+  "ruda": "images/ruda.jpg",
+  "tomate": "images/tomate.jpg",
+  "lechuga": "images/lechuga.jpg",
+  "cebolla": "images/cebolla.jpg",
+  "cilantro": "images/cilantro.jpg",
   "corona de cristo": "images/coronadecristo.jpg",
-  periskia: "images/perizkia.jpg",
+  "periskia": "images/perizquia.jpg",          // nombre visible → archivo real
   "cactus estrella": "images/captusestrella.jpg",
-  suculenta: "images/suculenta.jpg",
+  "suculenta": "images/suculenta.jpg",
   "chile verde": "images/chileverde.jpg"
 };
+
 // Enviar formulario de registro de planta
 function enviarFormulario(event) {
   event.preventDefault();
@@ -153,20 +154,23 @@ function mostrarMisPlantas() {
       const rango = obtenerRango(tipoPlanta);
       const estado = humedad < rango.min || humedad > rango.max ? "⚠️ Fuera de rango" : "✅ En rango";
 
-      // Buscar imagen, si no tiene asignada usa default
-      const nombreImagen = planta.imageFile ? planta.imageFile : "images/default.jpg";
+     // Primero obtenemos la clave correcta para buscar la imagen
+const nombrePlantaKey = (nombrePlantaRaw || "").toLowerCase().replace(/\s/g, "");
+const imageFile = imagenesMenu[nombrePlantaKey] || "images/default.jpg";
 
-      const tarjeta = document.createElement("div");
-      tarjeta.classList.add("plant");
-      tarjeta.innerHTML = `
-        <h3>${customPlantName}</h3>
-        <img src="${nombreImagen}" alt="${nombrePlantaRaw}" width="200" style="margin-bottom:10px;">
-        <p><strong>Planta:</strong> ${nombrePlantaRaw}</p>
-        <p><strong>Tipo:</strong> ${tipoPlanta}</p>
-        <p><strong>Humedad actual:</strong> ${humedad}%</p>
-        <p><strong>Estado:</strong> ${estado}</p>
-        <button onclick="eliminarPlanta(${idPlanta})" style="background:#e74c3c; color:white; border:none; padding:5px 10px; cursor:pointer;">🗑️ Eliminar</button>
-      `;
+// Luego creamos la tarjeta usando esa imagen
+const tarjeta = document.createElement("div");
+tarjeta.classList.add("plant");
+tarjeta.innerHTML = `
+  <h3>${customPlantName}</h3>
+  <img src="${imageFile}" alt="${nombrePlantaRaw}" width="200" style="margin-bottom:10px;">
+  <p><strong>Planta:</strong> ${nombrePlantaRaw}</p>
+  <p><strong>Tipo:</strong> ${tipoPlanta}</p>
+  <p><strong>Humedad actual:</strong> ${humedad}%</p>
+  <p><strong>Estado:</strong> ${estado}</p>
+  <button onclick="eliminarPlanta(${idPlanta})" style="background:#e74c3c; color:white; border:none; padding:5px 10px; cursor:pointer;">🗑️ Eliminar</button>
+`;
+
       contenedor.appendChild(tarjeta);
     });
   })
