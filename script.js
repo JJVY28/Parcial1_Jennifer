@@ -1,8 +1,25 @@
+const imagenesMenu = {
+  "Hierbabuena": "hiervabuena.jpg",
+  "Menta": "menta.jpg",
+  "Romero": "romero.jpg",
+  "Ruda": "ruda.jpg",
+  "Tomate": "tomate.jpg",
+  "Cebolla": "cebolla.jpg",
+  "Cilantro": "cilantro.jpg",
+  "Corona de Cristo": "coronadecristo.jpg",
+  "Periskia": "periskia.jpg",
+  "Cactus Estrella": "cactusestrella.jpg",
+  "Suculenta": "suculenta.jpg"
+};
+
 // Enviar formulario de registro de planta
 function enviarFormulario(event) {
   event.preventDefault();
 
+
   const plantName = document.getElementById("plantName").value;
+  const imageFile = imagenesMenu[plantName]; // <- aquí seleccionamos la imagen correcta
+
   const plantType = document.getElementById("plantType").value;
   const userName = document.getElementById("userName").value.trim();
   const customPlantName = document.getElementById("customPlantName").value.trim();
@@ -20,7 +37,7 @@ function enviarFormulario(event) {
   fetch('https://parcial1-jennifer.onrender.com/registrarPlanta', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ plantName, plantType, userName, customPlantName, telefono, correo })
+    body: JSON.stringify({ plantName, plantType, userName, customPlantName, telefono, correo,  imageFile: imageFile   })
   })
   .then(res => res.json())
   .then(data => {
@@ -135,7 +152,7 @@ function mostrarMisPlantas() {
       const rango = obtenerRango(tipoPlanta);
       const estado = humedad < rango.min || humedad > rango.max ? "⚠️ Fuera de rango" : "✅ En rango";
 
-      const nombreImagen = nombrePlanta + ".jpg";
+      const nombreImagen = planta.imageFile || "default.jpg"; 
 
       const tarjeta = document.createElement("div");
       tarjeta.classList.add("plant");
