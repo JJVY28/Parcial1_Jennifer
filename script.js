@@ -19,7 +19,12 @@ function enviarFormulario(event) {
 
 
   const plantName = document.getElementById("plantName").value;
-  const imageFile = imagenesMenu[plantName]; // <- aquí seleccionamos la imagen correcta
+// Normaliza el nombre de la planta: quita espacios y pasa a minúsculas
+const nombreNormalizado = plantName.toLowerCase().replace(/\s/g, "");
+
+// Busca la imagen correspondiente, si no hay, usa la default
+const imageFile = imagenesMenu[plantName] || imagenesMenu[Object.keys(imagenesMenu).find(key => key.toLowerCase().replace(/\s/g, "") === nombreNormalizado)] || "images/default.jpg";
+
 
   const plantType = document.getElementById("plantType").value;
   const userName = document.getElementById("userName").value.trim();
@@ -142,7 +147,6 @@ function mostrarMisPlantas() {
       const nombrePlantaRaw = planta.plantname || planta.plantName || "";
       // Convertir a string para evitar error si es undefined/null
       const nombrePlantaStr = nombrePlantaRaw ? nombrePlantaRaw.toString() : "";
-      const nombrePlanta = nombrePlantaStr.toLowerCase().replace(/\s/g, "");
       const customPlantName = planta.customplantname || planta.customPlantName || "Sin nombre";
       const tipoPlanta = planta.planttype || planta.plantType || "desconocido";
       const idPlanta = planta.id || planta.ID || null;
