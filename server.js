@@ -24,8 +24,8 @@ app.get('/', (req, res) => {
 // Rangos de humedad ideales
 const rangos = {
   aromaticas: { min: 60, max: 90 },
-  hortalizas: { min: 70, max: 95 },
-  flores: { min: 50, max: 85 }
+  hortalizas: { min: 50, max: 85 },
+  flores: { min: 30, max: 70 }
 };
 
 // Configurar transporte de correos
