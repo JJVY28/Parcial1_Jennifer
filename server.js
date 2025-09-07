@@ -134,7 +134,7 @@ app.post('/registrarPlanta', (req, res) => {
     customPlantName,
     telefono,
     correo,
-    imageFile: imageFile?path.basename(imageFile):"default.jpg", // 🔹 aquí guardamos la imagen
+    imageFile: imageFile || "images/default.jpg", // 🔹 aquí guardamos la imagen
     created_at: new Date().toISOString()
   };
 
