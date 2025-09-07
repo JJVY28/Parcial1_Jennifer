@@ -8,8 +8,8 @@ const imagenesMenu = {
   cebolla: "images/cebolla.jpg",
   cilantro: "images/cilantro.jpg",
   "corona de cristo": "images/coronadecristo.jpg",
-  periskia: "images/periskia.jpg",
-  "cactus estrella": "images/cactusestrella.jpg",
+  periskia: "images/perizkia.jpg",
+  "cactus estrella": "images/captusestrella.jpg",
   suculenta: "images/suculenta.jpg",
   "chile verde": "images/chileverde.jpg"
 };
@@ -211,9 +211,9 @@ async function obtenerHumedadActual() {
 // Obtener rango ideal por tipo de planta
 function obtenerRango(tipo) {
   const rangos = {
-    aromaticas: { min: 60, max: 90 },
-    hortalizas: { min: 70, max: 95 },
-    flores: { min: 50, max: 85 }
+    aromaticas: { min: 70, max: 80 },
+    hortalizas: { min: 50, max: 80 },
+    flores: { min: 30, max: 70 }
   };
   return rangos[tipo] || { min: 0, max: 100 };
 }
